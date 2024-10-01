@@ -1,0 +1,21 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - 3000:3000
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - 5000:80
+    develop:
+      watch:
+        - action: rebuild
+          path: ./backend
+          target: /api
+          ignore:
+            - ./backend/BookTracker/obj
+            - ./backend/BookTracker/bin
