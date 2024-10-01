@@ -79,8 +79,10 @@ app.MapDelete("api/remove-book/{bookRemoveId:int}", (int bookRemoveId) =>
 // Function to edit an existing book object by passing desired changes through another book object
 app.MapPut("api/update-book", (Book updateBook) =>
 {
+    // Traverse through the list, size is known
     for (int i = 0; i < listOfBooks.Count(); i++)
     {
+        // Checks if id matches with any of the books in the list
         if (updateBook.Id == listOfBooks[i].Id)
         {
             listOfBooks[i].Title = updateBook.Title;
