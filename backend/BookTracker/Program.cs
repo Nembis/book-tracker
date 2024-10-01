@@ -58,6 +58,7 @@ app.MapPost("api/add-book", (Book newBook) =>
     return Results.Created();
 });
 
+// Function to delete a book object
 app.MapDelete("api/remove-book/{bookRemoveId:int}", (int bookRemoveId) => 
 {
     Console.WriteLine("Remove ID: " + bookRemoveId.ToString());
@@ -75,6 +76,7 @@ app.MapDelete("api/remove-book/{bookRemoveId:int}", (int bookRemoveId) =>
     return Results.NotFound();
 });
 
+// Function to edit an existing book object by passing desired changes through another book object
 app.MapPut("api/update-book", (Book updateBook) =>
 {
     for (int i = 0; i < listOfBooks.Count(); i++)
