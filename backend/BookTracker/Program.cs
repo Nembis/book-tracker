@@ -82,8 +82,8 @@ app.MapPut("api/update-book", (Book updateBook) =>
     // Traverse through the list, size is known
     for (int i = 0; i < listOfBooks.Count(); i++)
     {
-        // Checks if id matches with any of the books in the list
-        if (updateBook.Id == listOfBooks[i].Id)
+        // Checks if id matches with any of the books in the list 
+        if (updateBook.Id == listOfBooks[i].Id) // Advances if the param id matches with a book from the list database
         {
             listOfBooks[i].Title = updateBook.Title;
             listOfBooks[i].Description = updateBook.Description;
@@ -98,9 +98,13 @@ app.MapPut("api/update-book", (Book updateBook) =>
 
 app.Run();
 
+// List Class for "Books" that includes the necessities like get and set functions for core information
 public class Book
 {
+    // Unique ID for each book
     public required int Id { get; set; }
+    // Name of the Book
     public required string Title { get; set; }
+    // Notes, synopsis, review, or summary that the user can write for the book the choose
     public required string Description { get; set; }
 }
