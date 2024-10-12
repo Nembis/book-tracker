@@ -1,3 +1,8 @@
+using DBAccess.DatabaseAccess;
+using DBAccess.Datas.Author;
+using DBAccess.Datas.User;
+using DBAccess.Dtos.User;
+using DBAccess.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
+builder.Services.AddSingleton<IUserData, UserData>();
+builder.Services.AddSingleton<IauthorData, AuthorData>();
 
 var app = builder.Build();
 
@@ -18,85 +27,83 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("api/hello-world", () => 
+app.MapGet("api/users", async (IUserData userData, ILogger<Program> logger) =>
 {
-    return Results.Ok(new {
-        message = "Hello Quan"
-    });
-});
-
-app.MapGet("api/greetings/{name}/{age:int}", (string name, int age) => 
-{
-    return Results.Ok(new {
-        Name = name,
-        age = age,
-        Messsage = "Hello: " + name + " you are" + age.ToString() + " years old."
-    });
-});
-
-// Temp book information storage
-List<Book> listOfBooks = new List<Book>();
-
-app.MapGet("api/get-all-books", () =>
-{
-    return Results.Ok(new {
-        AllBooks = listOfBooks
-    });
-});
-
-app.MapPost("api/add-book", (Book newBook) => 
-{
-    for (int i = 0; i < listOfBooks.Count(); i++) 
+    try 
     {
-        if (newBook.Id == listOfBooks[i].Id) {
-            return Results.BadRequest(new {
-                message = "Book with id: " + newBook.Id + " already exists in the database.",
-            });
-        }
+        var users = await userData.GetAllUsersAsync();
+        return Results.Ok(users);
     }
-    listOfBooks.Add(newBook);
-    return Results.Created();
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Failed to get all users from the database.");
+        return Results.Problem(ex.Message);
+    }
 });
 
-app.MapDelete("api/remove-book/{bookRemoveId:int}", (int bookRemoveId) => 
+app.MapGet("api/user/{userId:int}", async (int userId, IUserData userData, ILogger<Program> logger) =>
 {
-    Console.WriteLine("Remove ID: " + bookRemoveId.ToString());
-    for (int i = 0; i < listOfBooks.Count(); i++)
+    try
     {
-        if (bookRemoveId == listOfBooks[i].Id)
+        var user = await userData.GetUserAsync(userId);
+
+        if (user == null)
         {
-            listOfBooks.RemoveAt(i);
-            return Results.Ok(new {
-                message = "Book with ID: " + bookRemoveId + " was removed from the database."
-            });
+            logger.LogWarning("User with userId: {ID} does not exist in the database.", userId);
+            return Results.NotFound();
         }
+
+        return Results.Ok(user);
+
     }
-
-    return Results.NotFound();
-});
-
-app.MapPut("api/update-book", (Book updateBook) =>
-{
-    for (int i = 0; i < listOfBooks.Count(); i++)
+    catch (Exception ex)
     {
-        if (updateBook.Id == listOfBooks[i].Id)
-        {
-            listOfBooks[i].Title = updateBook.Title;
-            listOfBooks[i].Description = updateBook.Description;
-            return Results.Ok(new {
-                message = "Updated book with new information."
-            });
-        }
+        logger.LogError(ex, "Failed to get user by id.");
+        return Results.Problem(ex.Message);
     }
-
-    return Results.NotFound();
 });
+
+app.MapPost("api/user", async (CreateUserDto newUser, IUserData userData, ILogger<Program> logger) => 
+{
+    try  
+    {
+        await  userData.CreateUserAsync(newUser);
+        return Results.Created();
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Failed to create new user.");
+        return Results.Problem(ex.Message);
+    }
+});
+
+app.MapPut("api/user", async (UpdateUserDto updateUser, IUserData userData, ILogger<Program> logger) =>
+{
+    try
+    {
+        await userData.UpdateUserAsync(updateUser);
+        return Results.Ok();
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Failed to update user.");
+        return Results.Problem(ex.Message);
+    }
+});
+
+app.MapDelete("api/user/{userId:int}", async (int userId, IUserData userData, ILogger<Program> logger) =>
+{
+    try
+    {
+        await userData.DeleteUserAsync(userId);
+        return Results.Ok();
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Failed to delete teh user.");
+        return Results.Problem(ex.Message);
+    }
+});
+
 
 app.Run();
-
-public class Book
-{
-    public required int Id { get; set; }
-    public required string Title { get; set; }
-    public required string Description { get; set; }
-}

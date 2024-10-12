@@ -9,6 +9,8 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    environment:
+      ConnectionStrings__Default: ${ConnectionStrings__Default}
     ports:
       - 5000:80
     develop:
@@ -19,3 +21,28 @@ services:
           ignore:
             - ./backend/BookTracker/obj
             - ./backend/BookTracker/bin
+
+  postgres:
+    image: postgres:16.1-alpine3.18
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - 5432:5432
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
+      - ./db/start-scripts:/docker-entrypoint-initdb.d
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - 8080:80
+    depends_on:
+      - postgres
