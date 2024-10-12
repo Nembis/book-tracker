@@ -14,7 +14,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
 builder.Services.AddSingleton<IUserData, UserData>();
-builder.Services.AddSingleton<IauthorData, AuthorData>();
+builder.Services.AddSingleton<IAuthorData, AuthorData>();
 
 var app = builder.Build();
 
