@@ -6,7 +6,7 @@ using DBAccess.Models;
 
 namespace DBAccess.Datas.Author;
 
-public class AuthorData : IauthorData
+public class AuthorData : IAuthorData
 {
     private readonly ISqlDataAccess _db;
 

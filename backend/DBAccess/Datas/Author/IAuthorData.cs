@@ -4,7 +4,7 @@ using DBAccess.Models;
 
 namespace DBAccess.Datas.Author;
 
-public interface IauthorData
+public interface IAuthorData
 {
     Task<IEnumerable<AuthorModel>> GetAllAuthors();
     Task<AuthorModel?> GetAuthor(int authorId);
