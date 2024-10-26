@@ -1,79 +1,53 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "./components/button/button.component";
+import { CreateUserForm } from "./components/form/create-user-form.ccomponent";
+import { H1 } from "./components/header/h1.component";
+import { IUser } from "./refs/constants.ref";
+import { getAllUsers } from "./http-requests/user.request";
+import { DisplayUsers } from "./components/data-display/display-users.component";
 
-interface IBook {
-  title: string;
-  description: string;
-}
+type TDisplaySectionName = "Create User Form" | "See All Users";
 
 function App() {
-  const [books, setBooks] = useState<IBook[]>([]);
-  const [bookTitle, setBookTitle] = useState("");
-  const [bookDescription, setBookDescription] = useState("");
-
-  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setBookTitle(() => value);
-  };
-
-  const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    const { value } = e.target;
-    setBookDescription(() => value);
-  };
-
-  const handleBookFormSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (bookTitle === "" || bookDescription === "") {
-      return;
-    }
-
-    setBooks((curr) => [
-      ...curr,
-      { title: bookTitle, description: bookDescription },
-    ]);
-    setBookTitle(() => "");
-    setBookDescription(() => "");
-  };
+  const [displayedSection, setDisplayedSection] =
+    useState<TDisplaySectionName>("See All Users");
 
   return (
     <div className="p-2">
-      <h1 className="text-center text-4xl font-bold">Book Tracker</h1>
+      <H1 text={"Book Tracker"} />
 
-      <form
-        className="flex w-full justify-center items-center p-2"
-        onSubmit={handleBookFormSubmit}
-      >
-        <div className="flex flex-col p-2 border border-black rounded-md w-1/4 gap-2">
-          <input
-            type="text"
-            placeholder="Title"
-            onChange={handleTitleChange}
-            value={bookTitle}
-            className="resize-none rounded-md p-2"
+      <div className="flex justify-center p-2">
+        <div className="w-1/3 border border-gray-700 rounded-md shadow-md shadow-gray-400 p-4 flex justify-around gap-2">
+          <Button
+            type="button"
+            color="blue"
+            text="Create New User"
+            onClick={() => setDisplayedSection("Create User Form")}
           />
-
-          <textarea
-            placeholder="Book Description"
-            onChange={handleDescriptionChange}
-            value={bookDescription}
-            className="resize-none rounded-md p-2"
+          <Button
+            type="button"
+            color="blue"
+            text="See All Users"
+            onClick={() => setDisplayedSection("See All Users")}
           />
-
-          <Button text="Add Book" color="blue" type="submit" />
-        </div>
-      </form>
-
-      <div className="flex justify-center p-2 max-h-80 overflow-scroll">
-        <div className="m-2 p-2 border border-black rounded-md w-1/2 space-y-2">
-          {books.map((book) => (
-            <div className="w-full p-2 border border-gray-500 rounded-md">
-              <h4 className="text-xl font-bold">{book.title}</h4>
-              <hr />
-              <p>{book.description}</p>
-            </div>
-          ))}
         </div>
       </div>
+
+      {displayedSection === "Create User Form" && (
+        <div className="flex justify-center w-full">
+          <div className="w-1/3">
+            <CreateUserForm />
+          </div>
+        </div>
+      )}
+
+      {displayedSection === "See All Users" && (
+        <div className="flex justify-center w-full">
+          <div className="flex flex-col gap-2 w-1/3 border border-gray-700 rounded-md shadow-md shadow-gray-400 p-4">
+            <DisplayUsers />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
