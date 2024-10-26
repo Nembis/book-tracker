@@ -1,4 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from "react";
+import { Button } from "./components/button/button.component";
 
 interface IBook {
   title: string;
@@ -58,12 +59,7 @@ function App() {
             className="resize-none rounded-md p-2"
           />
 
-          <button
-            type="submit"
-            className="bg-blue-600 hover:bg-blue-800 p-2 text-white rounded-md"
-          >
-            Add New Book
-          </button>
+          <Button text="Add Book" color="blue" type="submit" />
         </div>
       </form>
 
