@@ -29,6 +29,7 @@ export const CreateUserForm: FC<CreateUserFormProps> = ({}) => {
     } catch (err) {
       if (isAxiosError(err)) {
         console.log("Axios Error Message: ", err.message);
+        return;
       }
       console.log("Error: ", err);
     }

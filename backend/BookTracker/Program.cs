@@ -1,3 +1,4 @@
+using BookTracker.Routes;
 using DBAccess.DatabaseAccess;
 using DBAccess.Datas.Author;
 using DBAccess.Datas.User;
@@ -108,10 +109,11 @@ app.MapDelete("api/user/{userId:int}", async (int userId, IUserData userData, IL
     }
     catch (Exception ex)
     {
-        logger.LogError(ex, "Failed to delete teh user.");
+        logger.LogError(ex, "Failed to delete the user.");
         return Results.Problem(ex.Message);
     }
 });
 
+app.ConfigureAuthorRoute();
 
 app.Run();
