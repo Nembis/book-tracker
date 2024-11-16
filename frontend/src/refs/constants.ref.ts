@@ -4,3 +4,10 @@ export interface IUser {
   password: string;
   createDate: string;
 }
+
+export interface IAuthor {
+  authorId: number;
+  firstName: string;
+  lastName: string;
+  createDate: string;
+}

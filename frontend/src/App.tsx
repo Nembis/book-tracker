@@ -1,12 +1,16 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "./components/button/button.component";
+import { DisplayUsers } from "./components/data-display/display-users.component";
 import { CreateUserForm } from "./components/form/create-user-form.ccomponent";
 import { H1 } from "./components/header/h1.component";
-import { IUser } from "./refs/constants.ref";
-import { getAllUsers } from "./http-requests/user.request";
-import { DisplayUsers } from "./components/data-display/display-users.component";
+import { CreateAuthorForm } from "./components/form/create-author-form.component";
+import { DisplayAuthors } from "./components/data-display/display-authors.component";
 
-type TDisplaySectionName = "Create User Form" | "See All Users";
+type TDisplaySectionName =
+  | "Create User Form"
+  | "See All Users"
+  | "Create Author Form"
+  | "See All Authors";
 
 function App() {
   const [displayedSection, setDisplayedSection] =
@@ -30,6 +34,18 @@ function App() {
             text="See All Users"
             onClick={() => setDisplayedSection("See All Users")}
           />
+          <Button
+            type="button"
+            color="blue"
+            text="Create New Author"
+            onClick={() => setDisplayedSection("Create Author Form")}
+          />
+          <Button
+            type="button"
+            color="blue"
+            text="See All Authors"
+            onClick={() => setDisplayedSection("See All Authors")}
+          />
         </div>
       </div>
 
@@ -45,6 +61,22 @@ function App() {
         <div className="flex justify-center w-full">
           <div className="flex flex-col gap-2 w-1/3 border border-gray-700 rounded-md shadow-md shadow-gray-400 p-4">
             <DisplayUsers />
+          </div>
+        </div>
+      )}
+
+      {displayedSection === "Create Author Form" && (
+        <div className="flex justify-center w-full">
+          <div className="w-1/3">
+            <CreateAuthorForm />
+          </div>
+        </div>
+      )}
+
+      {displayedSection === "See All Authors" && (
+        <div className="flex justify-center w-full">
+          <div className="flex flex-col gap-2 w-1/3 border border-gray-700 rounded-md shadow-md shadow-gray-400 p-4">
+            <DisplayAuthors />
           </div>
         </div>
       )}

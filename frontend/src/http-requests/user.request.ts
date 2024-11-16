@@ -1,13 +1,13 @@
 import axios, { AxiosResponse } from "axios";
-import { IUser } from "../refs/constants.ref";
+import { IAuthor, IUser } from "../refs/constants.ref";
 
 const baseAxios = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
 
-type TGetALlUsersResponse = AxiosResponse<IUser[], any>;
+type TGetAllUsersResponse = AxiosResponse<IUser[], any>;
 
-export const getAllUsers = async (): Promise<TGetALlUsersResponse> =>
+export const getAllUsers = async (): Promise<TGetAllUsersResponse> =>
   await baseAxios.get("api/users");
 
 type TCreateNewUserResponse = AxiosResponse<null, any>;
@@ -26,3 +26,19 @@ type TDeleteUserResponse = AxiosResponse<null, any>;
 export const deleteUser = async (
   userId: number
 ): Promise<TDeleteUserResponse> => await baseAxios.delete(`api/user/${userId}`);
+
+type TCreateAuthorResponse = AxiosResponse<null, any>;
+
+export const createNewAuthor = async (
+  firstName: string,
+  lastName: string
+): Promise<TCreateAuthorResponse> =>
+  await baseAxios.post("api/author", {
+    firstName: firstName,
+    lastName: lastName,
+  });
+
+type TGetAllAuthorsResponse = AxiosResponse<IAuthor[], any>;
+
+export const getAllAuthors = async (): Promise<TGetAllAuthorsResponse> =>
+  await baseAxios.get("api/author");
