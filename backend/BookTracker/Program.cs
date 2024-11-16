@@ -1,7 +1,10 @@
+using BookTracker.Dtos;
 using BookTracker.Routes;
 using DBAccess.DatabaseAccess;
 using DBAccess.Datas.Author;
+using DBAccess.Datas.Book;
 using DBAccess.Datas.User;
+using DBAccess.Dtos.Book;
 using DBAccess.Dtos.User;
 using DBAccess.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -21,8 +24,9 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(builder =>
 }));
 
 builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
-builder.Services.AddSingleton<IUserData, UserData>();
 builder.Services.AddSingleton<IAuthorData, AuthorData>();
+builder.Services.AddSingleton<IBookData, BookData>();
+builder.Services.AddSingleton<IUserData, UserData>();
 
 var app = builder.Build();
 
