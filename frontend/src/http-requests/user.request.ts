@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { IAuthor, IUser } from "../refs/constants.ref";
+import { IAuthor, IBook, IUser } from "../refs/constants.ref";
 
 const baseAxios = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -42,3 +42,10 @@ type TGetAllAuthorsResponse = AxiosResponse<IAuthor[], any>;
 
 export const getAllAuthors = async (): Promise<TGetAllAuthorsResponse> =>
   await baseAxios.get("api/author");
+
+type TGetAuthorBooksResponse = AxiosResponse<IBook[], any>;
+
+export const getAuthorBooks = async (
+  authorId: number
+): Promise<TGetAuthorBooksResponse> =>
+  await baseAxios.get(`api/book/${authorId}`);
