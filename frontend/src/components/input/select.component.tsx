@@ -1,12 +1,12 @@
 import { FC, SelectHTMLAttributes } from "react";
 
-export interface Option {
+export interface SelectOption {
   display: string;
   value: any;
 }
 
 interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
-  options: Option[];
+  options: SelectOption[];
 }
 
 export const Select: FC<SelectProps> = ({ options, ...props }) => {

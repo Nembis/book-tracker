@@ -11,7 +11,7 @@ interface ICreateBookParams {
   authoerId: number;
   title: string;
   description?: string;
-  isbnNumber?: number;
+  isbnNumber?: string;
 }
 
 export const createNewBook = async (

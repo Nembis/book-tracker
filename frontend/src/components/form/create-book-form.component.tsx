@@ -1,17 +1,24 @@
-import { ChangeEvent, FC, useState } from "react";
+import { ChangeEvent, FC, FormEvent, useEffect, useState } from "react";
 import { FormWrapper } from "../form-wrapper/form-wrapper.component";
 import { H2 } from "../header/h2.component";
 import { Input } from "../input/input.component";
-import { Select } from "../input/select.component";
+import { Select, SelectOption } from "../input/select.component";
 import { Button } from "../button/button.component";
+import { getAllAuthors } from "../../http-requests/user.request";
+import { createNewBook } from "../../http-requests/book.request";
 
 interface CreateBookFormProps {}
 
 export const CreateBookForm: FC<CreateBookFormProps> = () => {
+  const [authorOptions, setAuthorOptions] = useState<SelectOption[]>([]);
   const [authorId, setAuthorId] = useState(0);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [isbnNumber, setIsbnNumber] = useState("");
+
+  const handleAuthorIdChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setAuthorId(() => Number.parseInt(e.target.value));
+  };
 
   const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(() => e.target.value);
@@ -25,23 +32,49 @@ export const CreateBookForm: FC<CreateBookFormProps> = () => {
     setIsbnNumber(() => e.target.value);
   };
 
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      await createNewBook({
+        authoerId: authorId,
+        title: title,
+        description: description,
+        isbnNumber: isbnNumber,
+      });
+
+      alert("New book created");
+      setTitle(() => "");
+      setDescription(() => "");
+      setIsbnNumber(() => "");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    const init = async () => {
+      try {
+        const res = await getAllAuthors();
+        setAuthorOptions(() =>
+          res.data.map(({ firstName, lastName, authorId }) => ({
+            display: `${firstName} ${lastName}`,
+            value: authorId,
+          }))
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    init();
+  }, []);
+
   return (
-    <FormWrapper>
+    <FormWrapper onSubmit={handleSubmit}>
       <H2 text="Create New Book" />
 
-      <Select
-        options={[
-          {
-            display: "Test 1",
-            value: 1,
-          },
-          {
-            display: "Test 2",
-            value: 2,
-          },
-        ]}
-        onChange={(e) => console.log(e.target.value)}
-      />
+      <Select options={authorOptions} onChange={handleAuthorIdChange} />
 
       <Input
         type="text"
