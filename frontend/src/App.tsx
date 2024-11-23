@@ -5,12 +5,14 @@ import { CreateUserForm } from "./components/form/create-user-form.ccomponent";
 import { H1 } from "./components/header/h1.component";
 import { CreateAuthorForm } from "./components/form/create-author-form.component";
 import { DisplayAuthors } from "./components/data-display/display-authors.component";
+import { CreateBookForm } from "./components/form/create-book-form.component";
 
 type TDisplaySectionName =
   | "Create User Form"
   | "See All Users"
   | "Create Author Form"
-  | "See All Authors";
+  | "See All Authors"
+  | "Create New Book";
 
 function App() {
   const [displayedSection, setDisplayedSection] =
@@ -46,6 +48,12 @@ function App() {
             text="See All Authors"
             onClick={() => setDisplayedSection("See All Authors")}
           />
+          <Button
+            type="button"
+            color="blue"
+            text="Create New Book"
+            onClick={() => setDisplayedSection("Create New Book")}
+          />
         </div>
       </div>
 
@@ -77,6 +85,14 @@ function App() {
         <div className="flex justify-center w-full">
           <div className="flex flex-col gap-2 w-1/3 border border-gray-700 rounded-md shadow-md shadow-gray-400 p-4">
             <DisplayAuthors />
+          </div>
+        </div>
+      )}
+
+      {displayedSection === "Create New Book" && (
+        <div className="flex justify-center w-full">
+          <div className="w-1/3">
+            <CreateBookForm />
           </div>
         </div>
       )}

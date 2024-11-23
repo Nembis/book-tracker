@@ -1,13 +1,9 @@
-using BookTracker.Dtos;
 using BookTracker.Routes;
 using DBAccess.DatabaseAccess;
 using DBAccess.Datas.Author;
 using DBAccess.Datas.Book;
 using DBAccess.Datas.User;
-using DBAccess.Dtos.Book;
 using DBAccess.Dtos.User;
-using DBAccess.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 var builder = WebApplication.CreateBuilder(args);
 
