@@ -115,5 +115,6 @@ app.MapDelete("api/user/{userId:int}", async (int userId, IUserData userData, IL
 });
 
 app.ConfigureAuthorRoute();
+app.ConfigureBookRoute();
 
 app.Run();
