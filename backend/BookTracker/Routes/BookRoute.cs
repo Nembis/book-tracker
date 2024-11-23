@@ -19,6 +19,11 @@ public static class BookRoute
     {
         try
         {
+            logger.LogInformation("AuthorId {AuthorId}", newBook.AuthorId);
+            logger.LogInformation("Title {Title}", newBook.Title);
+            logger.LogInformation("Description {Description}", newBook.Description);
+            logger.LogInformation("ISBN Number {IsbnNumber}", newBook.IsbnNumber);
+
             await book.CreateBook(newBook);
             return Results.Ok();
         }

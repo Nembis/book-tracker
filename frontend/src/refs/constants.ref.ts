@@ -11,3 +11,12 @@ export interface IAuthor {
   lastName: string;
   createDate: string;
 }
+
+export interface IBook {
+  bookId: number;
+  title: string;
+  description: string;
+  isbnNumber: string;
+  authorId: number;
+  createDate: string;
+}
